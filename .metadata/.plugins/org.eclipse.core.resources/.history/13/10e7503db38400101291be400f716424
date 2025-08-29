@@ -38,7 +38,7 @@ public class D2_1954_달팽이숫자 {
 			int cnt = maxCnt; // 이동 칸 상태 
 			
 			for (int n=1; n<=N*N; n++) {
-				arr[i][j] = n; // 배열에 삽입
+				arr[i][j] = n; // 배열에 번호 삽입
 				if (s==0) {
 					if (cnt != 0) {
 						j++;
