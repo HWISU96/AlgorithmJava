@@ -1,0 +1,110 @@
+/**
+  [풀이 의도]
+  N*N 크기의 2차원 배열에 1부터 N*N까지의 숫자를 달팽이 모양으로 채워나가는 문제
+  핵심 아이디어는 '방향'을 상태로 관리하고, 각 방향으로 이동해야 할 '칸 수'를 제어
+  달팽이는 오른쪽 -> 아래 -> 왼쪽 -> 위 순서로 방향을 전환하며, 한 바퀴 돌 때마다 이동하는 거리가 점차 줄어든다.
+  
+  1. 방향 상태(s): 0(우), 1(하), 2(좌), 3(상)으로 정의하여 현재 이동 방향을 관리.
+  2. 이동 횟수(maxCnt, cnt):
+  - maxCnt: 현재 방향에서 최대로 이동해야 할 칸의 수를 저장. (예: N=4일 때, 처음엔 3칸, 다음엔 3칸, 그 다음엔 2칸...)
+  - cnt: 현재 방향에서 남은 이동 횟수를 카운트. cnt가 0이 되면 방향을 전환.
+  3. 위치(i, j): 현재 숫자를 기록할 배열의 행(i)과 열(j) 인덱스를 표시.
+  
+  이 변수들을 이용해 1부터 N*N까지의 숫자를 순차적으로 배열에 기록하면서,
+  정해진 횟수만큼 이동하면 방향을 전환하고 이동 횟수를 갱신하는 방식으로 시뮬레이션 진행!
+ **/
+
+package SWEA;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
+public class D2_1954_달팽이숫자 {
+
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		int T = Integer.parseInt(br.readLine());
+		
+		for (int t=1; t<=T; t++) {
+			int N = Integer.parseInt(br.readLine());
+			
+			int[][] arr = new int[N][N];
+			
+			int s = 0; // 0:우, 1:하, 2:좌, 3:상
+			int i = 0; // 행
+			int j = 0; // 열
+			int maxCnt = N-1; // 이동 칸 제어
+			int cnt = maxCnt; // 이동 칸 상태 
+			
+			for (int n=1; n<=N*N; n++) {
+				arr[i][j] = n;
+				if (s==0) {
+					if (cnt != 0) {
+						j++;
+						cnt--;
+					}
+					else {
+						s = 1;
+						i++;
+						maxCnt--;
+						cnt = maxCnt;
+						continue;
+					}
+				}
+				
+				if (s==1) {
+					if (cnt != 0) {
+						i++;
+						cnt--;
+					}
+					else {
+						s = 2;
+						j--;
+						cnt = maxCnt;
+						continue;
+					}
+				}
+				
+				if (s==2) {
+					if (cnt != 0) {
+						j--;
+						cnt--;
+					}
+					else {
+						s = 3;
+						i--;
+						maxCnt--;
+						cnt = maxCnt;
+						continue;
+					}
+				}
+				
+				if (s==3) {
+					if (cnt != 0) {
+						i--;
+						cnt--;
+					}
+					else {
+						s = 0;
+						j++;
+						cnt = maxCnt;
+						continue;
+					}
+				}
+				
+			} // for end
+			
+			System.out.print("#"+t);
+			for (int r=0; r<N; r++) {
+				System.out.println();
+				for (int c=0; c<N; c++) {
+					System.out.print(arr[r][c]+" ");
+				}
+			}
+			System.out.println();
+		} // tc end
+		
+	}
+
+}
